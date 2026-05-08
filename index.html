@@ -5,20 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MyShake — Web Preview</title>
   <style>
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
       width: 100%;
-      height: 100%;
       background: #0D1A16;
       overflow-x: hidden;
     }
 
-    /* Loading screen */
     #loader {
       position: fixed;
       inset: 0;
@@ -31,14 +25,10 @@
       z-index: 100;
       transition: opacity 0.6s ease, visibility 0.6s ease;
     }
-
-    #loader.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
+    #loader.hidden { opacity: 0; visibility: hidden; }
 
     .loader-wordmark {
-      font-family: Georgia, 'Times New Roman', serif;
+      font-family: Georgia, serif;
       font-weight: bold;
       font-style: italic;
       font-size: 28px;
@@ -47,52 +37,30 @@
     }
 
     .loader-bar-track {
-      width: 160px;
-      height: 2px;
+      width: 160px; height: 2px;
       background: rgba(255,255,255,0.1);
-      border-radius: 2px;
-      overflow: hidden;
+      border-radius: 2px; overflow: hidden;
     }
-
     .loader-bar-fill {
-      height: 100%;
-      width: 0%;
+      height: 100%; width: 0%;
       background: #B8F55A;
-      border-radius: 2px;
       animation: loadfill 1.2s ease forwards;
     }
+    @keyframes loadfill { to { width: 100%; } }
 
-    @keyframes loadfill {
-      to { width: 100%; }
-    }
-
-    /* Image wrapper */
-    #preview-wrap {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
-
-    #preview-img {
-      width: 100%;
-      max-width: 1440px;
-      height: auto;
+    img {
       display: block;
-      margin: 0 auto;
+      width: 100%;
+      height: auto;
       opacity: 0;
-      transition: opacity 0.8s ease 0.2s;
+      transition: opacity 0.8s ease;
     }
+    img.visible { opacity: 1; }
 
-    #preview-img.visible {
-      opacity: 1;
-    }
-
-    /* Subtle branded footer */
     #footer {
       text-align: center;
       padding: 16px;
-      font-family: Calibri, 'Segoe UI', sans-serif;
+      font-family: Calibri, sans-serif;
       font-size: 11px;
       color: rgba(255,255,255,0.2);
       letter-spacing: 0.12em;
@@ -102,43 +70,30 @@
 </head>
 <body>
 
-  <!-- Loader -->
   <div id="loader">
     <div class="loader-wordmark">MyShake</div>
-    <div class="loader-bar-track">
-      <div class="loader-bar-fill"></div>
-    </div>
+    <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
   </div>
 
-  <!-- Full-width image -->
-  <div id="preview-wrap">
-    <img
-      id="preview-img"
-      src="https://raw.githubusercontent.com/boneysamjoy/myshake-test/main/Myshake%20webpre.png"
-      alt="MyShake Website Design Preview"
-    />
-  </div>
+  <img
+    id="img"
+    src="https://raw.githubusercontent.com/boneysamjoy/myshake-test/main/Myshake%20webpre.png"
+    alt="MyShake Website Design Preview"
+  />
 
   <div id="footer">MyShake · Live to Perform · Design Preview</div>
 
   <script>
-    const img = document.getElementById('preview-img');
+    const img = document.getElementById('img');
     const loader = document.getElementById('loader');
-
     function reveal() {
-      // Ensure loader bar animation has time to complete (~1.2s)
       setTimeout(() => {
         loader.classList.add('hidden');
         img.classList.add('visible');
       }, 1400);
     }
-
-    if (img.complete) {
-      reveal();
-    } else {
-      img.addEventListener('load', reveal);
-      img.addEventListener('error', reveal); // still hide loader on error
-    }
+    img.complete ? reveal() : img.addEventListener('load', reveal);
+    img.addEventListener('error', reveal);
   </script>
 
 </body>
